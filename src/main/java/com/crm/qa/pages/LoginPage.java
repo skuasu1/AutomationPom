@@ -1,5 +1,6 @@
 package com.crm.qa.pages;
 
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
@@ -8,46 +9,43 @@ import com.crm.qa.base.TestBase;
 
 public class LoginPage extends TestBase {
 
-	/*
-	 * this method need to create the page factories to store all the web elements
-	 * of the login page
-	 */
-
-	// Page factory to identify the username,password,login button and then sign up
-	// button/ OR
-
+	// Page Factory - OR:
 	@FindBy(name = "username")
 	WebElement username;
 
 	@FindBy(name = "password")
 	WebElement password;
 
-	@FindBy(xpath = "//input[@value='Login']")
-	WebElement LoginBtn;
+	@FindBy(xpath = "//input[@type='submit']")
+	WebElement loginBtn;
 
-	@FindBy(xpath = "//a[normalize-space()='Sign Up']")
-	WebElement SignUpBtn;
+	@FindBy(xpath = "//button[contains(text(),'Sign Up')]")
+	WebElement signUpBtn;
 
-	// constructor to load page factory
+	@FindBy(xpath = "//img[contains(@class,'img-responsive')]")
+	WebElement crmLogo;
+
+	// Initializing the Page Objects:
 	public LoginPage() {
-		// to have the current object
-		// all the variables are initialized with driver
 		PageFactory.initElements(driver, this);
 	}
 
-	// Action class related to the Login Page
-
+	// Actions:
 	public String validateLoginPageTitle() {
 		return driver.getTitle();
 	}
 
-	public HomePage Login(String un, String pwd) {
+	public boolean validateCRMImage() {
+		return crmLogo.isDisplayed();
+	}
+
+	public HomePage login(String un, String pwd) {
 		username.sendKeys(un);
 		password.sendKeys(pwd);
-		LoginBtn.click();
-
+		// loginBtn.click();
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+		js.executeScript("arguments[0].click();", loginBtn);
 		return new HomePage();
-
 	}
 
 }
